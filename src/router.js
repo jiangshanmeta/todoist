@@ -1,23 +1,45 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+
+import ProjectManage from '@/views/ProjectManage';
+import ProjectDetail from '@/views/ProjectDetail';
+import ScheduleManage from '@/views/ScheduleManage';
+import ScheduleDetail from '@/views/ScheduleDetail';
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
         {
-            path: '/',
-            name: 'home',
-            component: Home,
+            path: '/projectManage',
+            component: ProjectManage,
         },
         {
-            path: '/about',
-            name: 'about',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+            path: '/projectDetail/:projectId',
+            component: ProjectDetail,
+        },
+        {
+            path: '/scheduleManage',
+            component: ScheduleManage,
+        },
+        {
+            path: '/scheduleDetail/:date',
+            component: ScheduleDetail,
+            props: (route) => {
+                return {
+                    date: +route.params.date,
+                };
+            },
+        },
+
+        {
+            path: '/',
+            redirect: () => {
+                const date = new Date();
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                return `/scheduleDetail/${year}${month}`;
+            },
         },
     ],
 });
