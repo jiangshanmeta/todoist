@@ -17,6 +17,7 @@ export default new Router({
         {
             path: '/projectDetail/:projectId',
             component: ProjectDetail,
+            props: true,
         },
         {
             path: '/scheduleManage',

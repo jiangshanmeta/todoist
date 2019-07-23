@@ -1,0 +1,87 @@
+<template>
+    <main>
+        <slot name="beforeAll" />
+        <ListInfo
+            ref="listInfo"
+            :fields="fields"
+            :filters="filters"
+            :record-operators="recordOperators"
+            :filter-operators="filterOperators"
+            v-bind="listConfig"
+        >
+            <template #beforeFilters="scope">
+                <Operators
+                    v-if="listOperators.length>0"
+                    :operators="listOperators"
+                    v-bind="scope"
+                    :fields="fields"
+                    style="margin-bottom:8px;"
+                    @update="refreshListData"
+                />
+            </template>
+
+            <template
+                #afterFilters="scope"
+            >
+                <slot
+                    name="afterFilters"
+                    v-bind="scope"
+                />
+            </template>
+        </ListInfo>
+        <slot name="afterAll" />
+    </main>
+</template>
+
+<script>
+export default {
+    name: 'ListView',
+    components: {
+        ListInfo: () => import('@/components/common/ListInfo'),
+        Operators: () => import('@/components/common/Operators'),
+    },
+    inheritAttrs: true,
+    props: {
+        fields: {
+            type: Object,
+            required: true,
+        },
+        listOperators: {
+            type: Array,
+            default: function () {
+                return [];
+            },
+        },
+        filters: {
+            type: Array,
+            default: function () {
+                return [];
+            },
+        },
+        listConfig: {
+            type: Object,
+            default: function () {
+                return {};
+            },
+        },
+        recordOperators: {
+            type: Array,
+            default: function () {
+                return [];
+            },
+        },
+        filterOperators: {
+            type: Array,
+            default: function () {
+                return [];
+            },
+        },
+    },
+    methods: {
+        refreshListData () {
+            this.$refs.listInfo && this.$refs.listInfo.getListInfo();
+        },
+    },
+};
+
+</script>
