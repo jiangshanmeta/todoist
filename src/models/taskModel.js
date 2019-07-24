@@ -1,35 +1,14 @@
 import {
-    getProjectList,
-    doCreateProject,
-    doEditProject,
-    doDeleteProject,
-} from '@/server/project';
+    getTaskList,
+    doCreateTask,
+    doEditTask,
+    doDeleteTask,
+} from '@/server/task';
 
-import {
-    enumArr2Hash,
-} from '@/widget/utility';
-
-const statusEnums = [
-    {
-        label: '未开始',
-        value: 0,
-    },
-    {
-        label: '进行中',
-        value: 1,
-    },
-    {
-        label: '结束',
-        value: 2,
-    },
-    {
-        label: '暂停',
-        value: 3,
-    },
-];
+import EditorTaskDate from '@/components/task/Editors/EditorTaskDate';
 
 const editableFields = [
-    'name', 'status',
+    'name', 'date',
 ];
 
 const fieldLayout = [
@@ -37,7 +16,7 @@ const fieldLayout = [
         'name',
     ],
     [
-        'status',
+        'date',
     ],
 ];
 
@@ -47,38 +26,30 @@ export default {
             labelName: 'id',
         },
         name: {
-            labelName: '项目名称',
+            labelName: '名称',
             editor: {
                 name: 'EditorString',
                 default: '',
             },
         },
-        status: {
-            labelName: '状态',
+        projectId: {
+            labelName: 'projectId',
+        },
+        date: {
+            labelName: '时间',
             editor: {
-                name: 'EditorEnumSelect',
-                config: {
-                    candidate: statusEnums,
-                    default: statusEnums[0],
+                name: 'EditorTaskDate',
+                component: EditorTaskDate,
+                default () {
+                    return [];
                 },
             },
             view: {
-                component: () => import('@/components/common/Views/ViewEnum').then((rst) => rst.default),
-                config: {
-                    enums: enumArr2Hash(statusEnums),
+                handler (date) {
+                    return date.join(' , ');
                 },
             },
         },
-        createTS: {
-            labelName: '创建时间',
-            view: {
-                handler (ts) {
-                    const date = new Date(ts);
-                    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-                },
-            },
-        },
-
     },
     listOperators: [
         {
@@ -88,17 +59,17 @@ export default {
                 getCreateFields (cb) {
                     cb(editableFields);
                 },
-                doCreateRequest: (cb, data) => {
-                    data.createTS = Date.now();
-                    doCreateProject(data).then(cb);
+                doCreateRequest (cb, data) {
+                    data.projectId = this.$route.params.projectId;
+                    doCreateTask(data).then(cb);
                 },
                 fieldLayout,
                 triggerConfig: {
-                    text: '新建项目',
+                    text: '新建任务',
                     type: 'success',
                 },
                 dialogConfig: {
-                    title: '新建项目',
+                    title: '新建任务',
                 },
                 createBtnConfig: {
                     text: '确认创建',
@@ -111,30 +82,19 @@ export default {
             },
         },
     ],
-    filters: [
-        {
-            label: '状态',
-            field: 'status',
-            filterComponent: {
-                name: 'FilterEnumSelect',
-                config: {
-                    alllabel: '不限',
-                    allvalue: -1,
-                    candidate: statusEnums,
-                },
-                default: -1,
-            },
-            watch: true,
-        },
-    ],
+    filters: [],
     filterOperators: [],
     listConfig: {
-        listRequest (cb, params) {
-            getProjectList(params).then((data) => {
+        listRequest (cb) {
+            const query = {
+                projectId: this.$route.params.projectId,
+            };
+
+            getTaskList(query).then((data) => {
                 cb({
                     data,
                     fieldList: [
-                        'name', 'status', 'createTS',
+                        'name', 'date',
                     ],
                     total: data.length,
                 });
@@ -143,18 +103,6 @@ export default {
         paginated: false,
     },
     recordOperators: [
-        {
-            handler (resolve, data) {
-                this.$router.push({
-                    path: `/projectDetail/${data._id}`,
-                });
-            },
-            triggerConfig: {
-                text: '详情',
-                size: 'small',
-                type: 'primary',
-            },
-        },
         {
             name: 'RecordOperatorEdit',
             component: () => import('@/components/common/RecordOperators/RecordOperatorEdit').then((rst) => rst.default),
@@ -166,17 +114,17 @@ export default {
                     });
                 },
                 doEditRequest (cb, data) {
-                    doEditProject(data).then(cb);
+                    doEditTask(data).then(cb);
                 },
                 fieldLayout,
                 autoValidate: false,
                 triggerConfig: {
-                    text: '编辑项目',
+                    text: '编辑任务',
                     size: 'small',
                     type: 'primary',
                 },
                 dialogConfig: {
-                    title: '编辑项目',
+                    title: '编辑任务',
                 },
                 editBtnConfig: {
                     type: 'primary',
@@ -192,12 +140,7 @@ export default {
             component: () => import('@/components/common/RecordOperators/RecordOperatorDelete').then((rst) => rst.default),
             config: {
                 doDeleteRequest (cb, data) {
-                    doDeleteProject(data._id).then(cb).catch(() => {
-                        this.$message({
-                            type: 'danger',
-                            message: '需要删除项目的所有任务',
-                        });
-                    });
+                    doDeleteTask(data._id).then(cb);
                 },
                 triggerConfig: {
                     text: '删除项目',
@@ -206,5 +149,6 @@ export default {
                 },
             },
         },
+
     ],
 };
