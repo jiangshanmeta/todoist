@@ -1,40 +1,42 @@
 <template>
     <main>
-        <h2 v-if="projectInfo">{{projectInfo.name}}</h2>
-        <ListView v-bind="taskModel"/>
+        <h2 v-if="projectInfo">
+            {{ projectInfo.name }}
+        </h2>
+        <ListView v-bind="taskModel" />
     </main>
 </template>
 
 <script>
 import {
-    getProjectInfo
-} from "@/server/project"
+    getProjectInfo,
+} from '@/server/project';
 
-import taskModel from "@/models/taskModel"
-import ListView from "@/components/common/ListView"
+import taskModel from '@/models/taskModel';
+import ListView from '@/components/common/ListView';
 
 export default {
-    config:{
+    config: {
         taskModel,
     },
-    components:{
+    components: {
         ListView,
     },
-    props:{
-        projectId:{
-            type:String,
-            required:true,
+    props: {
+        projectId: {
+            type: String,
+            required: true,
         },
     },
-    data(){
+    data () {
         return {
-            projectInfo:null,
+            projectInfo: null,
         };
     },
-    created(){
-        getProjectInfo(this.projectId).then((doc)=>{
+    created () {
+        getProjectInfo(this.projectId).then((doc) => {
             this.projectInfo = doc;
         });
     },
-}
+};
 </script>

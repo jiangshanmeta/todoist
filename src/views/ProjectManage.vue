@@ -7,16 +7,16 @@
 </template>
 
 <script>
-import model from "@/models/projectModel"
-import ListView from "@/components/common/ListView"
+import model from '@/models/projectModel';
+import ListView from '@/components/common/ListView';
 
 export default {
-    name:'ProjectManage',
-    config:{
+    name: 'ProjectManage',
+    config: {
         model,
     },
-    components:{
+    components: {
         ListView,
     },
-}
+};
 </script>

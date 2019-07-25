@@ -99,6 +99,7 @@ export default {
                 },
                 dialogConfig: {
                     title: '新建项目',
+                    fullscreen: true,
                 },
                 createBtnConfig: {
                     text: '确认创建',
@@ -177,6 +178,7 @@ export default {
                 },
                 dialogConfig: {
                     title: '编辑项目',
+                    fullscreen: true,
                 },
                 editBtnConfig: {
                     type: 'primary',
