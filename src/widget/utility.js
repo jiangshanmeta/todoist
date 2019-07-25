@@ -27,9 +27,36 @@ function onceAsync (fn) {
     };
 }
 
+const numberOfDaysMap = {
+    1: 31,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31,
+};
+
+function numberOfDays (Y, M) {
+    if (M !== 2) {
+        return numberOfDaysMap[M];
+    }
+    // 闰年二月29天
+    if ((Y % 4 === 0 && Y % 100 !== 0) || Y % 400 === 0) {
+        return 29;
+    }
+    // 平年二月28天
+    return 28;
+}
+
 export {
     isAsyncFunction,
     enumArr2Hash,
     logError,
     onceAsync,
+    numberOfDays,
 };

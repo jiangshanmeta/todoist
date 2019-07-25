@@ -62,6 +62,8 @@ export default {
                 doCreateRequest (cb, data) {
                     data.projectId = this.$route.params.projectId;
                     doCreateTask(data).then(cb);
+                    this.$store.commit('clearTaskList');
+                    this.$store.dispatch('getCurrentMonthTaskList');
                 },
                 fieldLayout,
                 triggerConfig: {
@@ -116,6 +118,8 @@ export default {
                 },
                 doEditRequest (cb, data) {
                     doEditTask(data).then(cb);
+                    this.$store.commit('clearTaskList');
+                    this.$store.dispatch('getCurrentMonthTaskList');
                 },
                 fieldLayout,
                 autoValidate: false,
@@ -143,6 +147,8 @@ export default {
             config: {
                 doDeleteRequest (cb, data) {
                     doDeleteTask(data._id).then(cb);
+                    this.$store.commit('clearTaskList');
+                    this.$store.dispatch('getCurrentMonthTaskList');
                 },
                 triggerConfig: {
                     text: '删除项目',

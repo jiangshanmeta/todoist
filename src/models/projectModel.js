@@ -59,8 +59,8 @@ export default {
                 name: 'EditorEnumSelect',
                 config: {
                     candidate: statusEnums,
-                    default: statusEnums[0],
                 },
+                default: statusEnums[0].value,
             },
             view: {
                 component: () => import('@/components/common/Views/ViewEnum').then((rst) => rst.default),

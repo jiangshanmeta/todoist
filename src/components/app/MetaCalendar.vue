@@ -13,6 +13,12 @@
                 <div class="meta-calendar-day">
                     {{ data.day.split('-').pop() }}
                 </div>
+
+                <ViewDateTask
+                    v-if="$store.getters.taskGroupByDay[data.day.split('-').join('')]"
+                    :task-list="$store.getters.taskGroupByDay[data.day.split('-').join('')]"
+                />
+
                 <slot :date="+data.day.split('-').join('')" />
             </div>
         </template>
@@ -20,15 +26,26 @@
 </template>
 
 <script>
+import ViewDateTask from './ViewDateTask';
+
 export default {
+    components: {
+        ViewDateTask,
+    },
     data () {
         return {
             canlendarDate: new Date(),
         };
     },
     watch: {
-        canlendarDate () {
-
+        canlendarDate: {
+            handler () {
+                this.$store.dispatch('getTaskListByMonth', {
+                    year: this.canlendarDate.getFullYear(),
+                    month: this.canlendarDate.getMonth() + 1,
+                });
+            },
+            immediate: true,
         },
     },
     methods: {

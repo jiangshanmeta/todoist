@@ -2,6 +2,10 @@ import {
     taskDB,
 } from './index';
 
+import {
+    numberOfDays,
+} from '@/widget/utility';
+
 export function getTaskList (params) {
     return new Promise((resolve, reject) => {
         taskDB.find(params, (err, docs) => {
@@ -47,6 +51,29 @@ export function doDeleteTask (_id) {
                 reject(err);
             }
             resolve();
+        });
+    });
+}
+
+export function getTaskByMonth (year, month) {
+    const base = (year * 100 + month) * 100;
+    const day = numberOfDays(year, month);
+    const queryIn = [];
+    for (let i = 0; i < day; i++) {
+        queryIn.push(base + i + 1);
+    }
+    return new Promise((resolve, reject) => {
+        taskDB.find({
+            date: {
+                $elemMatch: {
+                    $in: queryIn,
+                },
+            },
+        }, (err, docs) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(docs);
         });
     });
 }
