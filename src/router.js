@@ -26,11 +26,7 @@ export default new Router({
         {
             path: '/scheduleDetail/:date',
             component: ScheduleDetail,
-            props: (route) => {
-                return {
-                    date: +route.params.date,
-                };
-            },
+            props: true,
         },
         {
             path: '/',

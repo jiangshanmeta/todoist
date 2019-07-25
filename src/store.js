@@ -5,6 +5,10 @@ import {
     getTaskByMonth,
 } from '@/server/task';
 
+import {
+    getProjectListByIds,
+} from '@/server/project';
+
 Vue.use(Vuex);
 
 let cacheMonthMap = {};
@@ -12,6 +16,7 @@ let cacheMonthMap = {};
 export default new Vuex.Store({
     state: {
         taskList: [],
+        projectList: [],
     },
     getters: {
         taskMap (state) {
@@ -29,6 +34,12 @@ export default new Vuex.Store({
                 return obj;
             }, Object.create(null));
         },
+        projectMap (state) {
+            return state.projectList.reduce((obj, record) => {
+                obj[record._id] = record.name;
+                return obj;
+            }, Object.create(null));
+        },
     },
     mutations: {
         clearTaskList (state) {
@@ -37,6 +48,12 @@ export default new Vuex.Store({
         },
         setTaskList (state, list) {
             state.taskList = list;
+        },
+        setProjectList (state, list) {
+            state.projectList = list;
+        },
+        clearProjectList (state) {
+            state.projectList = [];
         },
     },
     actions: {
@@ -71,6 +88,23 @@ export default new Vuex.Store({
                     }
                 });
                 commit('setTaskList', newTaskList);
+            });
+        },
+        getProjectList ({
+            state,
+            getters,
+            commit,
+        }, ids) {
+            const map = getters.projectMap;
+            const needRequestIds = ids.filter((id) => !map[id]);
+            if (needRequestIds.length === 0) {
+                return Promise.resolve();
+            }
+            return getProjectListByIds(needRequestIds).then((docs) => {
+                commit('setProjectList', [
+                    ...state.projectList,
+                    ...docs,
+                ]);
             });
         },
     },

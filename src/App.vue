@@ -3,6 +3,7 @@
         <el-menu
             mode="horizontal"
             router
+            :default-active="$store.state.route.path"
         >
             <el-menu-item
                 index="/projectManage"

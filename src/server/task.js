@@ -77,3 +77,18 @@ export function getTaskByMonth (year, month) {
         });
     });
 }
+
+export function getTaskByDate (date) {
+    return new Promise((resolve, reject) => {
+        taskDB.find({
+            date: {
+                $elemMatch: date,
+            },
+        }, (err, docs) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(docs);
+        });
+    });
+}

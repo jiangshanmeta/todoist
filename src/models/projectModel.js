@@ -168,6 +168,7 @@ export default {
                 },
                 doEditRequest (cb, data) {
                     doEditProject(data).then(cb);
+                    this.$store.commit('clearProjectList');
                 },
                 fieldLayout,
                 autoValidate: false,
@@ -200,6 +201,7 @@ export default {
                             message: '需要删除项目的所有任务',
                         });
                     });
+                    this.$store.commit('clearProjectList');
                 },
                 triggerConfig: {
                     text: '删除项目',

@@ -5,15 +5,15 @@ import {
     doDeleteTask,
 } from '@/server/task';
 
-import EditorTaskDate from '@/components/task/Editors/EditorTaskDate';
+import fields from './_taskFields';
 
 const editableFields = [
-    'name', 'date',
+    'name', 'date', 'status',
 ];
 
 const fieldLayout = [
     [
-        'name',
+        'name', 'status',
     ],
     [
         'date',
@@ -21,36 +21,7 @@ const fieldLayout = [
 ];
 
 export default {
-    fields: {
-        _id: {
-            labelName: 'id',
-        },
-        name: {
-            labelName: '名称',
-            editor: {
-                name: 'EditorString',
-                default: '',
-            },
-        },
-        projectId: {
-            labelName: 'projectId',
-        },
-        date: {
-            labelName: '时间',
-            editor: {
-                name: 'EditorTaskDate',
-                component: EditorTaskDate,
-                default () {
-                    return [];
-                },
-            },
-            view: {
-                handler (date) {
-                    return date.join(' , ');
-                },
-            },
-        },
-    },
+    fields,
     listOperators: [
         {
             name: 'ListOperatorCreate',
@@ -97,7 +68,7 @@ export default {
                 cb({
                     data,
                     fieldList: [
-                        'name', 'date',
+                        'name', 'date', 'status',
                     ],
                     total: data.length,
                 });

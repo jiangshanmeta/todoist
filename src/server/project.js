@@ -79,3 +79,18 @@ export function doDeleteProject (_id) {
         });
     });
 }
+
+export function getProjectListByIds (ids) {
+    return new Promise((resolve, reject) => {
+        projectDB.find({
+            _id: {
+                $in: ids,
+            },
+        }, (err, docs) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(docs);
+        });
+    });
+}
