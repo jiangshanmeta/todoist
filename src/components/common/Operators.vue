@@ -4,7 +4,7 @@
         ref="container"
         class="operator-container"
     >
-        <template v-for="(item,index) in operators">
+        <template v-for="(item,index) in finalOperators">
             <component
                 :is="item.name"
                 v-if="item.component"
@@ -48,7 +48,9 @@ export default {
     },
     props: {
         operators: {
-            type: Array,
+            type: [
+                Array, Function,
+            ],
             default: function () {
                 return [];
             },
@@ -65,8 +67,17 @@ export default {
             componentsInjected: false,
         };
     },
+    computed: {
+        finalOperators () {
+            if (Array.isArray(this.operators)) {
+                return this.operators;
+            } else {
+                return this.operators(this.data);
+            }
+        },
+    },
     created () {
-        this.needInjectOperatorComponentsList = getNeedInjectOperatorComponentsList(this.operators);
+        this.needInjectOperatorComponentsList = getNeedInjectOperatorComponentsList(this.finalOperators);
         this.injectOperatorComponents();
     },
     methods: {
