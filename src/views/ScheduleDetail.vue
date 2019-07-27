@@ -8,6 +8,10 @@
 <script>
 import ListView from '@/components/common/ListView';
 import dateTaskModel from '@/models/dateTaskModel';
+import {
+    deepFreeze,
+} from '@/widget/utility';
+
 export default {
     components: {
         ListView,
@@ -18,13 +22,13 @@ export default {
             required: true,
         },
     },
+    config: {
+        dateTaskModel: deepFreeze(dateTaskModel),
+    },
     computed: {
         titleDate () {
             return `${this.date.slice(0, 4)}-${this.date.slice(4, 6)}-${this.date.slice(-2)}`;
         },
-    },
-    config: {
-        dateTaskModel,
     },
 };
 </script>

@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import mergeAttrsConfig from '@/mixins/common/mergeAttrsConfig.js';
-import injectComponents from '@/widget/injectComponents';
-import getNeedInjectOperatorComponentsList from '@/injectHelper/injectOperatorComponentsHelper';
+import mergeAttrsConfig from '@/mixins/common/mergeAttrsConfig';
+import injectComponents from '@/components/common/injectHelper/injectComponents';
+import getNeedInjectOperatorComponentsList from '@/components/common/injectHelper/injectOperatorComponentsHelper';
 
 import {
     logError,

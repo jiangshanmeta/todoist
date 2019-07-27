@@ -41,12 +41,12 @@
 import AsyncValidator from 'async-validator';
 import Labels from '@/components/common/Labels/Labels';
 
-import injectComponents from '@/widget/injectComponents';
+import injectComponents from '@/components/common/injectHelper/injectComponents';
 import {
     getLabelMapByMode,
     getNeedInjectLabelComponentsList,
-} from '@/injectHelper/injectLabelComponentsHelper';
-import getNeedInjectEditorComponentsList from '@/injectHelper/injectEditorComponentsHelper';
+} from '@/components/common/injectHelper/injectLabelComponentsHelper';
+import getNeedInjectEditorComponentsList from '@/components/common/injectHelper/injectEditorComponentsHelper';
 
 export default {
     name: 'Editors',
@@ -234,7 +234,9 @@ export default {
 
                     const unwatch = this.$watch(() => {
                         return this.getRelateData(relateItem);
-                    }, callback, relateItem.config);
+                    }, callback, {
+                        ...relateItem.config,
+                    });
 
                     this.recordUnwatchs.push(unwatch);
                 });

@@ -93,10 +93,11 @@ import Views from '@/components/common/Views/Views';
 
 import {
     logError,
-} from '@/widget/utility.js';
+    deepFreeze,
+} from '@/widget/utility';
 
-import injectComponents from '@/widget/injectComponents';
-import getNeedInjectViewComponentsMap from '@/injectHelper/injectViewComponentsHelper';
+import injectComponents from '@/components/common/injectHelper/injectComponents';
+import getNeedInjectViewComponentsMap from '@/components/common/injectHelper/injectViewComponentsHelper';
 
 export default {
     name: 'ListInfo',
@@ -337,9 +338,9 @@ export default {
                 }
 
                 promise.then((data) => {
-                    this.fieldList = fieldList;
+                    this.fieldList = Object.freeze(fieldList);
                     this.total = total;
-                    this.data = data;
+                    this.data = deepFreeze(data);
                 });
             }).catch(logError);
         },

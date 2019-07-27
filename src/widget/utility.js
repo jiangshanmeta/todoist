@@ -27,6 +27,15 @@ function onceAsync (fn) {
     };
 }
 
+function deepFreeze (obj) {
+    const propNames = Object.getOwnPropertyNames(obj);
+    propNames.forEach(function (name) {
+        const prop = obj[name];
+        if (prop !== null && typeof prop === 'object') { deepFreeze(prop); }
+    });
+    return Object.freeze(obj);
+}
+
 const numberOfDaysMap = {
     1: 31,
     3: 31,
@@ -58,5 +67,6 @@ export {
     enumArr2Hash,
     logError,
     onceAsync,
+    deepFreeze,
     numberOfDays,
 };

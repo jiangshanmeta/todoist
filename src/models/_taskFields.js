@@ -1,9 +1,10 @@
 import EditorTaskDate from '@/components/task/Editors/EditorTaskDate';
-import ViewProjectId from '@/components/task/Views/ViewProjectId';
 
 import {
     enumArr2Hash,
 } from '@/widget/utility';
+
+import Vue from 'vue';
 
 const statusEnums = [
     {
@@ -34,14 +35,23 @@ export default {
     projectId: {
         labelName: 'projectId',
         view: {
-            component: ViewProjectId,
+            component: () => import('@/components/common/Views/ViewLink').then(rst => rst.default),
+            config: {
+                getLink (projectId) {
+                    return `/projectDetail/${projectId}`;
+                },
+                getText (projectId) {
+                    return this.$store.getters.projectMap[projectId];
+                },
+                tag: 'span',
+            },
         },
     },
     date: {
         labelName: '时间',
         editor: {
             name: 'EditorTaskDate',
-            component: EditorTaskDate,
+            component: Vue.extend(EditorTaskDate),
             default () {
                 return [];
             },

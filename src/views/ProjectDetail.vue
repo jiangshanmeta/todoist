@@ -14,10 +14,13 @@ import {
 
 import taskModel from '@/models/taskModel';
 import ListView from '@/components/common/ListView';
+import {
+    deepFreeze,
+} from '@/widget/utility';
 
 export default {
     config: {
-        taskModel,
+        taskModel: deepFreeze(taskModel),
     },
     components: {
         ListView,
