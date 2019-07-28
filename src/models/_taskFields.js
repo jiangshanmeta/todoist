@@ -6,7 +6,7 @@ import {
 
 import Vue from 'vue';
 
-const statusEnums = [
+export const statusEnums = [
     {
         label: '未开始',
         value: 0,

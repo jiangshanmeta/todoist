@@ -1,4 +1,5 @@
-import fields from './_taskFields';
+import * as taskConfig from './_taskFields';
+
 import {
     getTaskByDate,
     doEditTask,
@@ -77,18 +78,39 @@ const editTimeOperator = {
     },
 };
 
+const fieldList = [
+    'name', 'date', 'status', 'projectId',
+];
+
 export default {
-    fields,
+    fields: taskConfig.default,
+    filters: [
+        {
+            label: '状态',
+            field: 'status',
+            filterComponent: {
+                name: 'FilterEnumSelect',
+                config: {
+                    alllabel: '不限',
+                    allvalue: -1,
+                    candidate: taskConfig.statusEnums,
+                },
+                default: -1,
+            },
+            watch: true,
+        },
+    ],
     listConfig: {
-        listRequest (cb) {
+        listRequest (cb, query) {
             getTaskByDate(+this.$route.params.date).then((data) => {
                 const projectIds = data.map(item => item.projectId);
+                if (query.status !== -1) {
+                    data = data.filter(item => item.status === query.status);
+                }
                 this.$store.dispatch('getProjectList', projectIds).then(() => {
                     cb({
                         data,
-                        fieldList: [
-                            'name', 'date', 'status', 'projectId',
-                        ],
+                        fieldList,
                         total: data.length,
                     });
                 });
