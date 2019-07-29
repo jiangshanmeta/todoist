@@ -44,12 +44,12 @@ export default {
 </script>
 
 <style scoped>
-.is-selected{
-    position:absolute;
-    top:0;
-    left:0;
+.is-selected {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height:100%;
-    background:rgba(0, 255, 0, 0.5);
+    height: 100%;
+    background: rgba(0, 255, 0, 0.5);
 }
 </style>

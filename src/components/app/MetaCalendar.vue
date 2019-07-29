@@ -57,19 +57,22 @@ export default {
 </script>
 
 <style scoped>
-.meta-calendar >>> .el-calendar-day{
-    position:relative;
-    height:auto;
-    min-height:85px;
-    display:flex;
+.meta-calendar >>> .el-calendar-day {
+    position: relative;
+    height: auto;
+    min-height: 85px;
+    display: flex;
 }
-.meta-calendar >>> .el-calendar-table td{
-    padding:0;
+
+.meta-calendar >>> .el-calendar-table td {
+    padding: 0;
 }
-.meta-calendar-cell{
+
+.meta-calendar-cell {
     width: 100%;
 }
-.meta-calendar-day{
-    padding-bottom:5px;
+
+.meta-calendar-day {
+    padding-bottom: 5px;
 }
 </style>

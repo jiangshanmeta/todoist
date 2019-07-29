@@ -21,10 +21,10 @@ export default {
 </script>
 
 <style scoped>
-.view-date-task-ul{
-    margin:0;
-    padding:0;
-    font-size:12px;
-    list-style:none;
+.view-date-task-ul {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    list-style: none;
 }
 </style>

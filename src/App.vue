@@ -32,14 +32,15 @@ export default {
 </script>
 
 <style scoped>
-#app{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
+#app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
-.app-main{
-    flex-grow:1;
-    max-width:100%;
-    padding:15px;
+
+.app-main {
+    flex-grow: 1;
+    max-width: 100%;
+    padding: 15px;
 }
 </style>
