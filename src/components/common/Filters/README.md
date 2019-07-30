@@ -2,7 +2,7 @@
 
 ## 基础配置
 
-filters配置项应为一个数组，每一项都是一个筛选条件。
+filters配置项应为一个数组，或者一个返回数组的函数，每一项都是一个筛选条件。
 
 每一个筛选条件的配置项有：
 
@@ -43,10 +43,6 @@ filters组件是为了通用列表页的筛选条件所设计的，可直接使�
 
 * EditorString
 * EditorNumber
-* EditorTimeYear
-* EditorTimeMonth
-* EditorTimeDay
-* EditorTimeTs
 * EditorEnumSelect
 * EditorEnumAsyncSelect
 * EditorEnumRelatesSelect
