@@ -39,8 +39,8 @@ const editableFields = [
     'date',
 ];
 const editTimeOperator = {
-    name: 'RecordOperatorEdit',
-    component: () => import('@/components/common/RecordOperators/RecordOperatorEdit').then((rst) => rst.default),
+    name: 'DocumentOperatorEdit',
+    component: () => import('@/components/common/DocumentOperators/DocumentOperatorEdit').then((rst) => rst.default),
     config: {
         getEditInfo (cb, data) {
             cb({
@@ -118,7 +118,7 @@ export default {
         },
         paginated: false,
     },
-    recordOperators (data) {
+    documentOperators (data) {
         const result = [];
         if (data.status === 0) {
             result.push(doingOperator);

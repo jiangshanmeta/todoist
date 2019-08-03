@@ -2,37 +2,37 @@
     <div>
         <el-button
             v-bind="triggerConfig"
-            @click="handleClick"
+            @click="getEditFields"
         >
             {{ triggerConfig.text }}
         </el-button>
         <el-dialog
             v-if="canInitDialog"
-            :visible.sync="isShowCreatebox"
+            :visible.sync="isShowEditbox"
             v-bind="dialogConfig"
         >
             <Editors
-                ref="createbox"
+                ref="editbox"
                 :fields="fields"
-                :editable-fields="editableFields"
-                :field-layout="fieldLayout"
-                :effect-layout-fields="effectLayoutFields"
                 :record="record"
+                :editable-fields="editableFields"
+                :effect-layout-fields="effectLayoutFields"
+                :field-layout="fieldLayout"
                 :auto-validate="autoValidate"
-                mode="create"
+                mode="edit"
             />
             <template #footer>
                 <el-button
                     v-bind="cancelBtnConfig"
-                    @click="isShowCreatebox=false"
+                    @click="isShowEditbox=false"
                 >
                     {{ cancelBtnConfig.text }}
                 </el-button>
                 <el-button
-                    v-bind="createBtnConfig"
-                    @click="doCreate"
+                    v-bind="editBtnConfig"
+                    @click="doEdit"
                 >
-                    {{ createBtnConfig.text }}
+                    {{ editBtnConfig.text }}
                 </el-button>
             </template>
         </el-dialog>
@@ -40,26 +40,33 @@
 </template>
 
 <script>
+import _id_mixin from '@/mixins/document/_id_mixin';
 import {
     logError,
 } from '@/widget/utility';
 
 export default {
-    name: 'ListOperatorCreate',
+    name: 'DocumentOperatorEdit',
     components: {
         Editors: () => import('@/components/common/Editors/Editors'),
     },
-    inheritAttrs: true,
+    mixins: [
+        _id_mixin,
+    ],
     props: {
+        data: {
+            type: Object,
+            required: true,
+        },
         fields: {
             type: Object,
             required: true,
         },
-        getCreateFields: {
+        getEditInfo: {
             type: Function,
             required: true,
         },
-        doCreateRequest: {
+        doEditRequest: {
             type: Function,
             required: true,
         },
@@ -87,7 +94,7 @@ export default {
                 return [];
             },
         },
-        createBtnConfig: {
+        editBtnConfig: {
             type: Object,
             default () {
                 return {};
@@ -99,57 +106,53 @@ export default {
                 return {};
             },
         },
-        transformData: {
-            type: Function,
-            default (data) {
-                return data;
-            },
-        },
         autoValidate: {
             type: Boolean,
             default: false,
         },
+        transformData: {
+            type: Function,
+            default: function (data) {
+                return data;
+            },
+        },
+    },
+    state: {
+        editableFields: [],
+        record: {},
     },
     data () {
         return {
-            isShowCreatebox: false,
-            editableFields: [],
-            record: {},
+            isShowEditbox: false,
             canInitDialog: false,
         };
     },
     methods: {
-        showDialog () {
-            this.isShowCreatebox = true;
+        getEditFields () {
+            new Promise((resolve, reject) => {
+                this.getEditInfo(resolve, this.data);
+            }).then(({
+                editableFields, record,
+            }) => {
+                editableFields.forEach((field) => {
+                    if (!record.hasOwnProperty(field)) {
+                        const configDefault = this.fields[field].editor.default;
+                        record[field] = typeof configDefault === 'function' ? configDefault.call(this, field) : configDefault;
+                    }
+                });
+
+                this.editableFields = editableFields;
+                this.record = record;
+                this.canInitDialog = true;
+                this.isShowEditbox = true;
+            }).catch(logError);
         },
-        resetRecord () {
-            this.record = this.editableFields.reduce((obj, field) => {
-                const configDefault = this.fields[field].editor.default;
-                obj[field] = typeof configDefault === 'function' ? configDefault.call(this, field) : configDefault;
-                return obj;
-            }, {});
-        },
-        handleClick () {
-            if (this.editableFields.length === 0) {
+        doEdit () {
+            this.$refs.editbox.validate().then((data) => {
                 new Promise((resolve, reject) => {
-                    this.getCreateFields(resolve);
-                }).then((editableFields) => {
-                    this.editableFields = editableFields;
-                    this.resetRecord();
-                    this.canInitDialog = true;
-                    this.showDialog();
-                }).catch(logError);
-            } else {
-                this.resetRecord();
-                this.showDialog();
-            }
-        },
-        doCreate () {
-            this.$refs.createbox.validate().then((data) => {
-                new Promise((resolve) => {
-                    this.doCreateRequest(resolve, this.transformData(data));
+                    this.doEditRequest(resolve, this.transformData(data));
                 }).then(() => {
-                    this.isShowCreatebox = false;
+                    this.isShowEditbox = false;
                     this.$emit('update');
                 }).catch(logError);
             }).catch((err) => {

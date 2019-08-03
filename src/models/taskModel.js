@@ -22,10 +22,10 @@ const fieldLayout = [
 
 export default {
     fields,
-    listOperators: [
+    collectionOperators: [
         {
-            name: 'ListOperatorCreate',
-            component: () => import('@/components/common/ListOperators/ListOperatorCreate').then((rst) => rst.default),
+            name: 'CollectionOperatorCreate',
+            component: () => import('@/components/common/CollectionOperators/CollectionOperatorCreate').then((rst) => rst.default),
             config: {
                 getCreateFields (cb) {
                     cb(editableFields);
@@ -76,10 +76,10 @@ export default {
         },
         paginated: false,
     },
-    recordOperators: [
+    documentOperators: [
         {
-            name: 'RecordOperatorEdit',
-            component: () => import('@/components/common/RecordOperators/RecordOperatorEdit').then((rst) => rst.default),
+            name: 'DocumentOperatorEdit',
+            component: () => import('@/components/common/DocumentOperators/DocumentOperatorEdit').then((rst) => rst.default),
             config: {
                 getEditInfo (cb, data) {
                     cb({
@@ -113,8 +113,8 @@ export default {
             },
         },
         {
-            name: 'RecordOperatorDelete',
-            component: () => import('@/components/common/RecordOperators/RecordOperatorDelete').then((rst) => rst.default),
+            name: 'DocumentOperatorDelete',
+            component: () => import('@/components/common/DocumentOperators/DocumentOperatorDelete').then((rst) => rst.default),
             config: {
                 doDeleteRequest (cb, data) {
                     doDeleteTask(data._id).then(cb);
